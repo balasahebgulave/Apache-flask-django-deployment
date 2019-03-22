@@ -1,0 +1,162 @@
+# requirement-file-creation
+The repository contains code for creating requirements.txt
+
+
+# with debug mode
+pipreqs --encoding=utf8 --debug path
+
+# without debug mode
+pipreqs --encoding=utf8 path
+
+example-
+C:\Users\balas\Desktop\flaskApp>pipreqs --encoding=utf8  C:\Users\balas\Desktop\flaskApp
+
+# command for setting python3 path(envirnment) in linux AWS
+# sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 10
+
+
+
+
+
+
+
+
+
+
+Appache Configuration File Step by Step AWS_Configuration
+
+
+-->Login the AWS Account
+-->Go to EC2
+-->Launch Instance 
+-->Step1-Select the Virtual machines(Choose an amazon machine image)----(ex-linux,unbuntu) Note:Dont take linux2
+-->step2-choose the any General purpose  free tier and Next the configuartion instance Details
+-->step3-No changes --Next Add Storage
+-->step4-No changes --Next Add storage
+-->step5-Add tags No changes --Next configure security groups
+-->step6-Add Rule(select Drop downs 1.)ssh 2.)http 3.)https ) --Review and launch
+-->step7- Key window--Create new pair key (Key pair name-Learning) Download key pair-- launch instance
+
+-->Open puttygen and load the .pem file and save as private(.ppk)
+
+-->Ec2 Dashboard-> click on Running instances-> copy the IPV4 public ip(ex-13.125.227.74)
+
+-->open Putty paste the above ip in the HOST NAME and save session by any name
+-->SSh->Auth->Browse saved .ppk file 
+
+
+
+
+
+-->Login as :ec2-user
+change the python version: 
+-->sudo su
+-->sudo yum install python3 (optional-->sudo yum install python-devl)
+-->sudo yum install python36-devel
+-->pip install setuptools
+
+
+
+
+
+
+To check the directory of old python version
+-->whereis python2
+-->cd /usr/lib/python2.7
+To check the directory of new python version
+-->whereis python3
+To update the python 
+-->sudo upadte-alternatives --set python /usr/bin/python3.6
+OR
+-->sudo update-alternatives --install/usr/bin/python python/usr/bin/python3 10
+
+
+
+
+
+For apache installation:
+-->sudo yum install httpd
+-->sudo yum install httpd-devel
+-->sudo yum install gcc
+-->pip install mod_wsgi
+
+
+
+
+
+for error log:
+-->vi /var/log/httpd/error_log
+
+
+
+
+
+for apache server cheack:
+-->service httpd start
+check:hit your  instance IP on browser  
+
+For checking our mod_wsgi package status:
+-->whereis mod_wsgi
+check first in :
+-->cd /usr/local/lib64/python3.6/site-packages
+check second in:
+-->cd /usr/lib64/python3.6/site-package OR dist-packages
+check third in:
+-->cd /usr/lib/python3.6/site-package OR dist-packages
+
+
+
+
+
+
+
+configuration path for mod_wsgi:
+
+path:In the above status here we got mod_wsgi present path 
+For example path:/usr/local/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-cpython36m-x86_64-linux-gnu.so
+
+
+
+
+For server configuration:
+-->vi /etc/httpd/conf/httpd.conf
+
+LoadModule wsgi_module /usr/local/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
+<IFModule mod_wsgi.c>
+        WSGIScriptAlias / /var/www/html/industry_classification/industry_classification/wsgi.py
+        WSGIPythonHome /usr
+        WSGIPythonPath /var/www/html/industry_classification
+</IFModule>
+
+<VirtualHost *:8000>
+        ServerAdmin admin@example1.com
+        DocumentRoot /var/www/html/industry_classification
+        ServerName 13.59.246.69
+
+        Alias /static /var/www/html/industry_classification/industry/static
+        Alias /media /var/www/html/industry_classification/media
+        <Directory /usr>
+                Order deny,allow
+                Allow from all
+        </Directory>
+        <Directory /var/www/html/industry_classification/industry/static>
+                Order deny,allow
+                Allow from all
+        </Directory>
+        <Directory /var/www/html/industry_classification/media>
+                Order deny,allow
+                Allow from all
+        </Directory>
+</VirtualHost>
+
+
+
+
+
+
+
+
+
+
+
+
