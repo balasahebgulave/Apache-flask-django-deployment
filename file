@@ -152,11 +152,17 @@ LoadModule wsgi_module /usr/local/lib64/python3.6/site-packages/mod_wsgi/server/
 
 
 
+for Flask Configuration
 
+create flask.wsgi file in project directory and write following code in file.
 
-
-
-
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/html/visualizationproject/")
+# import your app here from main file
+from app import app as application
+application.secret_key = '12345'
 
 
 
