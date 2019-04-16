@@ -151,6 +151,42 @@ LoadModule wsgi_module /usr/local/lib64/python3.6/site-packages/mod_wsgi/server/
 
 
 
+OR
+
+LoadModule wsgi_module /usr/lib64/python3.6/dist-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
+<IFModule mod_wsgi.c>
+        WSGIScriptAlias / /var/www/html/rntdjangoapps/RNT1/RNT1/wsgi.py
+        WSGIPythonHome /usr
+        WSGIPythonPath /var/www/html/rntdjangoapps/RNT1
+</IFModule>
+
+<VirtualHost *:8000>
+        ServerAdmin webmaster@dummy-host.example.com
+        DocumentRoot /var/www/html/rntdjangoapps/RNT1
+        ServerName 18.224.78.148
+
+        Alias /static /var/www/html/rntdjangoapps/RNT1/textconvertor/static
+        Alias /media /var/www/html/rntdjangoapps/RNT1/media
+        <Directory /usr>
+                Order deny,allow
+                Allow from all
+        </Directory>
+        <Directory /var/www/html/rntdjangoapps/RNT1/textconvertor/static>
+                Order deny,allow
+                Allow from all
+        </Directory>
+        <Directory /var/www/html/rntdjangoapps/RNT1/media>
+                Order deny,allow
+                Allow from all
+        </Directory>
+</VirtualHost>
+
+
+
+
+
+
+
 
 for Flask Configuration
 
@@ -163,6 +199,35 @@ sys.path.insert(0,"/var/www/html/visualizationproject/")
 # import your app here from main file
 from app import app as application
 application.secret_key = '12345'
+
+
+For server configuration:
+-->vi /etc/httpd/conf/httpd.conf
+
+
+LoadModule wsgi_module /usr/lib64/python3.6/dist-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
+<IFModule mod_wsgi.c>
+       WSGIScriptAlias / /var/www/html/visualizationproject/flask.wsgi
+       WSGIPythonHome /usr
+       WSGIPythonPath /var/www/html/visualizationproject
+</IFModule>
+
+<VirtualHost *:5000>
+       ServerAdmin webmaster@dummy-host.example.com
+       DocumentRoot /var/www/html/visualizationproject
+       ServerName 18.224.78.148
+
+       Alias /static /var/www/html/visualizationproject/static
+       <Directory /usr>
+               Order deny,allow
+               Allow from all
+       </Directory>
+       <Directory /var/www/html/visualizationproject/static>
+               Order deny,allow
+               Allow from all
+       </Directory>
+</VirtualHost>
+
 
 
 
