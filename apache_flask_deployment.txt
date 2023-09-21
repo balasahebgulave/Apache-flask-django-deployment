@@ -1,0 +1,100 @@
+Deploying Flask Application on Ubuntu (Apache+WSGI)
+
+To deploy a Flask application on Ubuntu, you will need to have the following prerequisites installed:
+
+Python 3: Flask is a Python web framework, so you will need to have Python installed on your server.
+Flask: You will need to install Flask using pip, the Python package manager.
+Apache2: Apache is a popular web server that can be used to host Flask applications.
+mod_wsgi: This Apache module is used to interface with WSGI-compatible web applications like Flask.
+
+$ sudo apt-get update 
+$ sudo apt-get upgrade 
+
+$ sudo apt-get install python3 python3-pip python3-venv 
+$ sudo apt-get install apache2 libapache2-mod-wsgi-py3
+
+
+Set up your Flask application
+
+$ mkdir /var/www/flaskapp 
+$ cd /var/www/flaskapp 
+
+$ python3 -m venv venv 
+$ source venv/bin/activate 
+
+$ pip install flask 
+
+Create a new Python file named app.py in the flaskapp directory and add the following code:
+
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return 'Hello, World!'
+from flask import Flask
+app = Flask(__name__)
+ 
+@app.route('/')
+def hello():
+    return 'Hello, World!'
+
+$ export FLASK_APP=app.py 
+$ flask run 
+
+
+Create a WSGI entry point for your Flask application:
+
+vim /var/www/flaskapp/flaskapp.wsgi 
+Paste the following code into the file, replacing “flaskapp” with the name of your application:
+
+import sys
+import logging
+
+sys.path.insert(0, '/var/www/flaskapp')
+sys.path.insert(0, '/var/www/flaskapp/venv/lib/python3.10/site-packages/')
+
+# Set up logging
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
+# Import and run the Flask app
+from app import app as application
+import sys
+import logging
+ 
+sys.path.insert(0, '/var/www/flaskapp')
+sys.path.insert(0, '/var/www/flaskapp/venv/lib/python3.10/site-packages/')
+ 
+# Set up logging
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+ 
+# Import and run the Flask app
+from app import app as application
+
+Create an Apache configuration file for your application:
+sudo vim /etc/apache2/sites-available/flaskapp.conf 
+
+<VirtualHost *:443>
+        ServerName  flaskapp.example.com
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/flaskapp
+ 
+        WSGIDaemonProcess flaskapp threads=5
+        WSGIScriptAlias / /var/www/flaskapp/flaskapp.wsgi
+        WSGIApplicationGroup %{GLOBAL}
+        <Directory flaskapp>
+             WSGIProcessGroup flaskapp
+             WSGIApplicationGroup %{GLOBAL}
+             Order deny,allow
+             Allow from all
+        </Directory>
+ 
+        ErrorLog ${APACHE_LOG_DIR}/flaskapp-error.log
+        CustomLog ${APACHE_LOG_DIR}/flaskapp-access.log combined
+</VirtualHost>
+
+Enable the new Apache configuration:
+$ sudo a2ensite flaskapp.example.com
+
+Restart Apache to apply the changes:
+$ sudo service apache2 restart  
