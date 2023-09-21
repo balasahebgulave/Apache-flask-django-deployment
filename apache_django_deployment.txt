@@ -78,7 +78,7 @@ Enable the Virtual Host File for Django Project
 Once we created djangoapp.conf the file we need the enable that virtual host file by typing
 
 $ cd /etc/apache2/sites-available
-$ sudo a2ensite djangoproject.conf
+$ sudo a2ensite djangoapp.conf
 
 
 Wrapping Up Some Permissions Issues
