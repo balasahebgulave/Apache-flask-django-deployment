@@ -1,0 +1,81 @@
+<VirtualHost *:80>
+
+        ServerName  {server_ip}
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/flaskapp
+
+        WSGIDaemonProcess flaskapp threads=5
+        WSGIScriptAlias / /var/www/flaskapp/flaskapp.wsgi
+        WSGIApplicationGroup %{GLOBAL}
+
+        <Directory flaskapp>
+             WSGIProcessGroup flaskapp
+             WSGIApplicationGroup %{GLOBAL}
+             Order deny,allow
+             Allow from all
+        </Directory>
+
+        ErrorLog ${APACHE_LOG_DIR}/flaskapp-error.log
+        CustomLog ${APACHE_LOG_DIR}/flaskapp-access.log combined
+        
+</VirtualHost>
+
+
+
+
+<VirtualHost *:80>
+
+    ServerName  {server_ip}
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/djangoapp/myproject
+
+    WSGIDaemonProcess myproject threads=5 python-path=/var/www/djangoapp/myproject python-home=/var/www/djangoapp/venv
+    WSGIScriptAlias / /var/www/djangoapp/myproject/myproject/wsgi.py
+    WSGIApplicationGroup %{GLOBAL}
+
+    <Directory /var/www/djangoapp/myproject/myproject>
+         WSGIProcessGroup myproject
+         WSGIApplicationGroup %{GLOBAL}
+         Order deny,allow
+         Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/djangoapp-error.log
+    CustomLog ${APACHE_LOG_DIR}/djangoapp-access.log combined
+
+</VirtualHost>
+
+
+
+
+<VirtualHost *:80>
+
+	ServerName {server_ip}
+	ServerAdmin admin@localhost
+	DocumentRoot /var/www/djangoapp/myproject
+
+	WSGIDaemonProcess django_project python-path=/var/www/djangoapp/myproject python-home=/var/www/djangoapp/venv
+	WSGIProcessGroup django_project
+	WSGIScriptAlias / /var/www/djangoapp/myproject/myproject/wsgi.py
+
+	
+	Alias /static /var/www/djangoapp/myproject/static
+	<Directory /var/www/djangoapp/myproject/static>
+		Require all granted
+	</Directory>
+
+	Alias /static /var/www/djangoapp/myproject/media
+	<Directory /var/www/djangoapp/myproject/media>
+		Require all granted
+	</Directory>
+
+	<Directory /var/www/djangoapp/myproject/myproject>
+		<Files wsgi.py>
+			Require all granted
+		</Files>
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/djangoapp-error.log
+	CustomLog ${APACHE_LOG_DIR}/djangoapp-access.log combined
+
+</VirtualHost>
