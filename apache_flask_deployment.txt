@@ -74,8 +74,8 @@ from app import app as application
 Create an Apache configuration file for your application:
 sudo vim /etc/apache2/sites-available/flaskapp.conf 
 
-<VirtualHost *:443>
-        ServerName  flaskapp.example.com
+<VirtualHost *:80>
+        ServerName  {server_ip}
         ServerAdmin webmaster@localhost
         DocumentRoot /var/www/flaskapp
  
@@ -94,7 +94,8 @@ sudo vim /etc/apache2/sites-available/flaskapp.conf
 </VirtualHost>
 
 Enable the new Apache configuration:
-$ sudo a2ensite flaskapp.example.com
+$ sudo a2ensite flaskapp.conf
 
 Restart Apache to apply the changes:
+$ sudo service apache2 reload
 $ sudo service apache2 restart  
